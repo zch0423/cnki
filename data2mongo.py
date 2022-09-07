@@ -11,6 +11,7 @@
 '''
 import os
 import json
+from unittest import result
 from pymongo import MongoClient
 from urllib import parse
 from configparser import ConfigParser
@@ -108,7 +109,8 @@ def main():
             if not entry.name.endswith("json"):
                 continue
             results = parseJson(entry.path, entry.name[:-5])
-            collection.insert_many(results)
+            if results:
+                collection.insert_many(results)
     client.close()
     
 if __name__ == "__main__":

@@ -9,6 +9,7 @@
             issue, year, authors, institutions,
             keywords, abstract
 '''
+from multiprocessing.sharedctypes import Value
 import os
 import json
 from unittest import result
@@ -58,7 +59,10 @@ def parseItem(item, journal):
         temp[key] = item[key]
     issue = item["yearMonth"]
     temp["issue"] = issue
-    temp["year"] = int(issue[:4])
+    try:
+        temp["year"] = int(issue[:4])
+    except ValueError:
+        temp["year"] = 0
     authors = []
     for id, author in item["authors"].items():
         authors.append({"authorID": id, "name": author})
@@ -104,13 +108,16 @@ def main():
     client = connectMongo(config_path)
     db = client["cnki"]
     collection = db["info"]
-    with os.scandir("data/jsonDone") as it:
-        for entry in it:
-            if not entry.name.endswith("json"):
-                continue
-            results = parseJson(entry.path, entry.name[:-5])
-            if results:
-                collection.insert_many(results)
+    try:
+        with os.scandir("data/jsonDone") as it:
+            for entry in it:
+                if not entry.name.endswith("json"):
+                    continue
+                results = parseJson(entry.path, entry.name[:-5])
+                if results:
+                    collection.insert_many(results)
+    except Exception as e:
+        print(e)
     client.close()
     
 if __name__ == "__main__":

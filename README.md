@@ -1,4 +1,9 @@
 ## README
 cnki total
+
+- data2db
+    - parse data 2 db
+
 - abstracts
-- magazine
+- references
+- journal

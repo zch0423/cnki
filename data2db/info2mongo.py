@@ -1,6 +1,6 @@
 # coding=utf-8
 '''
-    FileName      :data2mongo.py
+    FileName      :info2mongo.py
     Author        :@zch0423
     Date          :Sep 7, 2022
     Description   :
@@ -9,7 +9,6 @@
             issue, year, authors, institutions,
             keywords, abstract
 '''
-from multiprocessing.sharedctypes import Value
 import os
 import json
 from unittest import result
